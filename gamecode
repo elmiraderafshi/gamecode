@@ -1,0 +1,103 @@
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
+using UnityEngine.UI;
+using System.Linq;
+
+public class GameManager : MonoBehaviour
+{
+    public Image[] images;
+    int[] arryOfNums = {0 , 1 , 2 , 3 , 4 , 5 , 6 , 7};
+    Dictionary<string, Color> colours;
+    public Color colorTopick;
+
+    public int score;
+    public Text pickText;
+    public Text scoreText;
+    // Start is called before the first frame update
+    void Start()
+    {
+        colours = new Dictionary<string, Color>();
+        colours.Add("red" , Color.red);
+        colours.Add("blue", Color.blue);
+        colours.Add("white", Color.white);
+        colours.Add("cyan", Color.cyan);
+        colours.Add("grey", Color.grey);
+        colours.Add("yellow", Color.yellow);
+        colours.Add("black", Color.black);
+
+        images = GetComponentsInChildren<Image>();
+        setupClours();
+        setupText();
+
+
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
+    }
+
+    public void setupClours()
+    {
+        images = GetComponentsInChildren<Image>();
+        arryOfNums = arryOfNums.OrderBy(i => Random.Range(0 , images.Length)).ToArray();
+
+        int newNum = 0;
+
+        foreach (Image img in images)
+
+        {
+            img.color = setcolour(arryOfNums[newNum]);
+            newNum++;
+        }
+    }
+    public void setupText()
+    {
+        int rand = Random.Range(0 , colours.Count);
+        pickText.text = "CLick " + "" + colours.ElementAt(rand).Key;
+        colorTopick =  colours.ElementAt(rand).Value;
+        pickText.color = setcolour(Random.Range(0 ,7));
+        scoreText.text = "Score:"  + score;
+    }
+    public Color setcolour(int numInArry)
+    {
+        switch(numInArry)
+        {
+            case 0:
+                   return Color.red;
+                case 1: 
+                return Color.green; 
+            case 2:
+                return Color.blue;
+                case 3:
+                return Color.white;
+                case 4:
+                    return Color.cyan;
+                case 5:
+                    return Color.grey;
+                case 6:
+                    return Color.yellow;
+                case 7: 
+                    return Color.black;
+
+                default:
+                return Color.clear;
+
+        }
+    }
+
+    public void checkColor(Image image)
+    {
+        if(image.color == colorTopick)
+        {
+            setupClours();
+            setupText();
+            score++;
+            scoreText.text = "Score: " + score;
+        }
+
+    }    
+}
